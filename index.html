@@ -291,6 +291,14 @@ footer{
 
 </select>
 
+<input
+type="number"
+id="jumlahBuku"
+placeholder="Jumlah Buku Dipinjam"
+min="1"
+max="10"
+>
+
 <img
 id="coverBuku"
 src="https://via.placeholder.com/120x170/ff85a2/ffffff?text=Buku"
@@ -407,6 +415,7 @@ Kembalikan Buku
 <th>Nama</th>
 <th>Kelas</th>
 <th>Buku</th>
+<th>Jumlah</th>
 <th>Tanggal</th>
 <th>Jam</th>
 <th>Status</th>
@@ -422,7 +431,7 @@ Kembalikan Buku
 
 <td class="nomor">1</td>
 
-<td colspan="7" class="kosong">
+<td colspan="8" class="kosong">
 Belum ada riwayat peminjaman
 </td>
 
@@ -657,9 +666,6 @@ document.getElementById("coverBuku").src =
 let dataRiwayat =
 JSON.parse(localStorage.getItem("riwayatPerpus")) || [];
 
-let nomorRiwayat =
-dataRiwayat.length + 1;
-
 /* PINJAM */
 
 function prosesPinjam(){
@@ -670,7 +676,10 @@ document.getElementById("kelasSiswa").value;
 let buku =
 document.getElementById("cariBuku").value;
 
-if(!kelas || !namaDipilih || !buku){
+let jumlah =
+document.getElementById("jumlahBuku").value;
+
+if(!kelas || !namaDipilih || !buku || !jumlah){
 
 alert("Lengkapi data!");
 
@@ -698,6 +707,7 @@ document.getElementById("detailPinjam").innerHTML = `
 <b>Nama:</b> ${namaDipilih}<br>
 <b>Kelas:</b> ${kelas}<br>
 <b>Buku:</b> ${buku}<br>
+<b>Jumlah Buku:</b> ${jumlah}<br>
 <b>Tanggal Pinjam:</b> ${tanggal}<br>
 <b>Batas Pengembalian:</b>
 <span style="color:red;">
@@ -710,6 +720,7 @@ tambahRiwayat(
 namaDipilih,
 kelas,
 buku,
+jumlah,
 tanggal,
 jam
 );
@@ -726,6 +737,7 @@ function tambahRiwayat(
 nama,
 kelas,
 buku,
+jumlah,
 tanggal,
 jam
 ){
@@ -735,6 +747,7 @@ dataRiwayat.push({
 nama,
 kelas,
 buku,
+jumlah,
 tanggal,
 jam,
 status:"Dipinjam"
@@ -767,7 +780,7 @@ table.innerHTML = `
 
 <td class="nomor">1</td>
 
-<td colspan="7" class="kosong">
+<td colspan="8" class="kosong">
 Belum ada riwayat peminjaman
 </td>
 
@@ -792,6 +805,8 @@ row.innerHTML = `
 <td>${item.kelas}</td>
 
 <td>${item.buku}</td>
+
+<td>${item.jumlah}</td>
 
 <td>${item.tanggal}</td>
 
@@ -862,6 +877,8 @@ document.getElementById("kelasSiswa").value = "";
 document.getElementById("searchNama").value = "";
 
 document.getElementById("cariBuku").value = "";
+
+document.getElementById("jumlahBuku").value = "";
 
 document.getElementById("dropdownNama").innerHTML = "";
 
