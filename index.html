@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>E-Perpus Pinky</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 
@@ -185,6 +188,16 @@ td{
     margin-top:20px;
 }
 
+.btn-download{
+    width:auto;
+    background:#6f42c1;
+    padding:12px 18px;
+    border-radius:14px;
+    display:block;
+    margin-left:auto;
+    margin-top:10px;
+}
+
 footer{
     text-align:center;
     padding:30px;
@@ -245,6 +258,7 @@ footer{
 }
 
 </style>
+
 </head>
 
 <body>
@@ -254,6 +268,7 @@ footer{
 <header>
 
 <h1>📚 E-Perpus Pinky</h1>
+
 <p>Tugas Informatika Kelas 11</p>
 
 <p id="jam"></p>
@@ -399,7 +414,7 @@ Kembalikan Buku
 
 <!-- RIWAYAT -->
 
-<div class="card">
+<div class="card" id="laporanRiwayat">
 
 <h3>📋 Riwayat Peminjaman</h3>
 
@@ -448,6 +463,13 @@ class="btn-hapus-semua"
 onclick="hapusSemua()"
 >
 🗑 Hapus Semua Riwayat
+</button>
+
+<button
+class="btn-download"
+onclick="downloadPDF()"
+>
+📄 Download Laporan PDF
 </button>
 
 </div>
@@ -661,7 +683,7 @@ document.getElementById("coverBuku").src =
 
 }
 
-/* LOCAL STORAGE */
+/* STORAGE */
 
 let dataRiwayat =
 JSON.parse(localStorage.getItem("riwayatPerpus")) || [];
@@ -763,7 +785,7 @@ tampilkanRiwayat();
 
 }
 
-/* TAMPILKAN RIWAYAT */
+/* TAMPILKAN */
 
 function tampilkanRiwayat(){
 
@@ -868,7 +890,7 @@ alert("Buku berhasil dikembalikan!");
 
 }
 
-/* PEMINJAMAN BARU */
+/* BARU */
 
 function peminjamanBaru(){
 
@@ -893,7 +915,7 @@ nextStep(1);
 
 }
 
-/* HAPUS SEMUA */
+/* HAPUS */
 
 function hapusSemua(){
 
@@ -909,6 +931,41 @@ localStorage.removeItem("riwayatPerpus");
 tampilkanRiwayat();
 
 }
+
+}
+
+/* DOWNLOAD PDF */
+
+function downloadPDF(){
+
+let element =
+document.getElementById("laporanRiwayat");
+
+let opt = {
+
+margin:0.5,
+
+filename:
+'Laporan-Riwayat-Peminjaman.pdf',
+
+image:{
+type:'jpeg',
+quality:1
+},
+
+html2canvas:{
+scale:2
+},
+
+jsPDF:{
+unit:'in',
+format:'a4',
+orientation:'portrait'
+}
+
+};
+
+html2pdf().set(opt).from(element).save();
 
 }
 
