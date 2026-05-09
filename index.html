@@ -7,8 +7,6 @@
 
 <title>E-Perpus Pinky</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 <style>
 
 :root{
@@ -132,13 +130,13 @@ button{
 
 .table-container{
     overflow-x:auto;
+    width:100%;
 }
 
 table{
-    width:max-content;
-    min-width:100%;
     border-collapse:collapse;
-    white-space:nowrap;
+    min-width:1100px;
+    width:max-content;
 }
 
 th{
@@ -146,6 +144,7 @@ th{
     color:white;
     padding:12px;
     font-size:15px;
+    white-space:nowrap;
 }
 
 td{
@@ -153,6 +152,7 @@ td{
     padding:12px;
     font-size:14px;
     text-align:center;
+    white-space:nowrap;
 }
 
 .nomor{
@@ -414,13 +414,13 @@ Kembalikan Buku
 
 <!-- RIWAYAT -->
 
-<div class="card" id="laporanRiwayat">
+<div class="card">
 
 <h3>📋 Riwayat Peminjaman</h3>
 
 <div class="table-container">
 
-<table>
+<table id="tabelRiwayat">
 
 <thead>
 
@@ -467,9 +467,9 @@ onclick="hapusSemua()"
 
 <button
 class="btn-download"
-onclick="downloadPDF()"
+onclick="downloadExcel()"
 >
-📄 Download Laporan PDF
+📥 Download Excel
 </button>
 
 </div>
@@ -581,9 +581,7 @@ ${nama}
 
 });
 
-}
-
-else{
+}else{
 
 dropdown.innerHTML = `
 <div class="dropdown-item">
@@ -649,7 +647,7 @@ document
 
 }
 
-/* CEK KONDISI */
+/* KONDISI */
 
 function checkKondisi(){
 
@@ -660,9 +658,7 @@ if(ok){
 
 nextStep(3);
 
-}
-
-else{
+}else{
 
 alert("Buku rusak!");
 
@@ -834,9 +830,7 @@ row.innerHTML = `
 
 <td>${item.jam}</td>
 
-<td class="status">
-${item.status}
-</td>
+<td class="status">${item.status}</td>
 
 <td>
 
@@ -934,38 +928,58 @@ tampilkanRiwayat();
 
 }
 
-/* DOWNLOAD PDF */
+/* DOWNLOAD EXCEL */
 
-function downloadPDF(){
+function downloadExcel(){
 
-let element =
-document.getElementById("laporanRiwayat");
+let table =
+document.getElementById("tabelRiwayat").outerHTML;
 
-let opt = {
+let html = `
 
-margin:0.5,
+<html>
 
-filename:
-'Laporan-Riwayat-Peminjaman.pdf',
+<head>
 
-image:{
-type:'jpeg',
-quality:1
-},
+<meta charset="UTF-8">
 
-html2canvas:{
-scale:2
-},
+</head>
 
-jsPDF:{
-unit:'in',
-format:'a4',
-orientation:'portrait'
+<body>
+
+${table}
+
+</body>
+
+</html>
+
+`;
+
+let blob = new Blob(
+['\ufeff', html],
+{
+type:'application/vnd.ms-excel'
 }
+);
 
-};
+let url =
+URL.createObjectURL(blob);
 
-html2pdf().set(opt).from(element).save();
+let a =
+document.createElement("a");
+
+a.href = url;
+
+a.download =
+"Riwayat_Peminjaman.xls";
+
+document.body.appendChild(a);
+
+a.click();
+
+document.body.removeChild(a);
+
+URL.revokeObjectURL(url);
 
 }
 
@@ -976,4 +990,4 @@ tampilkanRiwayat();
 </script>
 
 </body>
-</html>
+    </html>
