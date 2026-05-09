@@ -7,9 +7,6 @@
 
 <title>E-Perpus Pinky</title>
 
-<!-- LIBRARY EXCEL -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
 <style>
 
 :root{
@@ -138,22 +135,21 @@ button{
 
 table{
     border-collapse:collapse;
-    min-width:1300px;
+    min-width:1100px;
     width:max-content;
 }
 
 th{
     background:var(--pink1);
     color:white;
-    padding:14px;
+    padding:12px;
     font-size:15px;
     white-space:nowrap;
-    border:2px solid #ffffff;
 }
 
 td{
-    border:2px solid #e8e8e8;
-    padding:14px;
+    border:1px solid #ddd;
+    padding:12px;
     font-size:14px;
     text-align:center;
     white-space:nowrap;
@@ -177,7 +173,7 @@ td{
     background:#28a745;
     border:none;
     color:white;
-    padding:7px 12px;
+    padding:7px 10px;
     border-radius:8px;
     cursor:pointer;
 }
@@ -285,8 +281,6 @@ footer{
 
 <div class="content">
 
-<!-- STEP 1 -->
-
 <div id="step1" class="card">
 
 <h3>1. Cari Buku</h3>
@@ -329,8 +323,6 @@ Cari & Ambil Buku
 
 </div>
 
-<!-- STEP 2 -->
-
 <div id="step2" class="card hidden">
 
 <h3>2. Cek Kondisi Buku</h3>
@@ -352,8 +344,6 @@ Lanjut ke Petugas
 </button>
 
 </div>
-
-<!-- STEP 3 -->
 
 <div id="step3" class="card hidden">
 
@@ -398,8 +388,6 @@ Konfirmasi Peminjaman
 
 </div>
 
-<!-- STEP 4 -->
-
 <div id="step4" class="card hidden">
 
 <h3>4. Status Peminjaman</h3>
@@ -415,8 +403,6 @@ Kembalikan Buku
 </button>
 
 </div>
-
-<!-- RIWAYAT -->
 
 <div class="card">
 
@@ -488,8 +474,6 @@ Dibuat Oleh Fahrul Lamusu
 
 <script>
 
-/* JAM */
-
 setInterval(()=>{
 
 let now = new Date();
@@ -502,15 +486,11 @@ minute:'2-digit'
 
 },1000);
 
-/* DARK MODE */
-
 function darkMode(){
 
 document.body.classList.toggle("dark");
 
 }
-
-/* DATA SISWA */
 
 const dataSiswa = {
 
@@ -558,8 +538,6 @@ const dataSiswa = {
 
 let namaDipilih = "";
 
-/* LOAD NAMA */
-
 function loadNamaSiswa(){
 
 let kelas =
@@ -599,8 +577,6 @@ dropdown.classList.remove("hidden");
 
 }
 
-/* FILTER */
-
 function filterNama(){
 
 let input =
@@ -620,8 +596,6 @@ item.innerText.toLowerCase().includes(input)
 
 }
 
-/* PILIH NAMA */
-
 function pilihNama(nama){
 
 namaDipilih = nama;
@@ -632,8 +606,6 @@ document.getElementById("dropdownNama")
 .classList.add("hidden");
 
 }
-
-/* STEP */
 
 function nextStep(step){
 
@@ -650,8 +622,6 @@ document
 .classList.remove("hidden");
 
 }
-
-/* KONDISI */
 
 function checkKondisi(){
 
@@ -670,8 +640,6 @@ alert("Buku rusak!");
 
 }
 
-/* COVER */
-
 function tampilCover(){
 
 let buku =
@@ -683,12 +651,8 @@ document.getElementById("coverBuku").src =
 
 }
 
-/* STORAGE */
-
 let dataRiwayat =
 JSON.parse(localStorage.getItem("riwayatPerpus")) || [];
-
-/* PINJAM */
 
 function prosesPinjam(){
 
@@ -753,8 +717,6 @@ nextStep(4);
 
 }
 
-/* TAMBAH RIWAYAT */
-
 function tambahRiwayat(
 nama,
 kelas,
@@ -784,8 +746,6 @@ JSON.stringify(dataRiwayat)
 tampilkanRiwayat();
 
 }
-
-/* TAMPILKAN */
 
 function tampilkanRiwayat(){
 
@@ -859,8 +819,6 @@ row.classList.add("selesai");
 
 }
 
-/* SELESAI */
-
 function tandaiSelesai(btn,index){
 
 let row =
@@ -880,15 +838,11 @@ row.querySelector(".status").innerHTML =
 
 }
 
-/* KEMBALI */
-
 function prosesKembali(){
 
 alert("Buku berhasil dikembalikan!");
 
 }
-
-/* BARU */
 
 function peminjamanBaru(){
 
@@ -913,8 +867,6 @@ nextStep(1);
 
 }
 
-/* HAPUS */
-
 function hapusSemua(){
 
 let konfirmasi =
@@ -932,83 +884,138 @@ tampilkanRiwayat();
 
 }
 
-/* DOWNLOAD EXCEL RAPI */
+/* DOWNLOAD EXCEL ESTETIK */
 
 function downloadExcel(){
 
-if(dataRiwayat.length === 0){
-
-alert("Belum ada riwayat!");
-
-return;
-
-}
-
-let excelData = [
-
-[
-"No",
-"Nama",
-"Kelas",
-"Buku",
-"Jumlah",
-"Tanggal",
-"Jam",
-"Status"
-]
-
-];
+let isiTabel = "";
 
 dataRiwayat.forEach((item,index)=>{
 
-excelData.push([
+isiTabel += `
 
-index+1,
-item.nama,
-item.kelas,
-item.buku,
-item.jumlah,
-item.tanggal,
-item.jam,
-item.status
+<tr>
 
-]);
+<td>${index+1}</td>
+<td>${item.nama}</td>
+<td>${item.kelas}</td>
+<td>${item.buku}</td>
+<td>${item.jumlah}</td>
+<td>${item.tanggal}</td>
+<td>${item.jam}</td>
+<td>${item.status}</td>
+
+</tr>
+
+`;
 
 });
 
-const wb = XLSX.utils.book_new();
+let html = `
 
-const ws = XLSX.utils.aoa_to_sheet(excelData);
+<html>
 
-/* BESAR KOLOM */
+<head>
 
-ws['!cols'] = [
+<meta charset="UTF-8">
 
-{wch:8},
-{wch:35},
-{wch:15},
-{wch:30},
-{wch:12},
-{wch:18},
-{wch:12},
-{wch:18}
+<style>
 
-];
-
-XLSX.utils.book_append_sheet(
-wb,
-ws,
-"Riwayat Peminjaman"
-);
-
-XLSX.writeFile(
-wb,
-"Laporan_Riwayat_Peminjaman.xlsx"
-);
-
+body{
+font-family:Arial,sans-serif;
+padding:30px;
+background:#fff0f5;
 }
 
-/* LOAD */
+h1{
+text-align:center;
+color:#d63384;
+font-size:28px;
+margin-bottom:30px;
+}
+
+table{
+border-collapse:collapse;
+width:100%;
+background:white;
+font-size:18px;
+}
+
+th{
+background:#ff85a2;
+color:white;
+font-weight:bold;
+border:3px solid #d63384;
+padding:16px;
+text-align:center;
+}
+
+td{
+border:3px solid #d63384;
+padding:14px;
+text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+Laporan Riwayat Peminjaman Buku Perpustakaan
+</h1>
+
+<table>
+
+<tr>
+
+<th>No</th>
+<th>Nama</th>
+<th>Kelas</th>
+<th>Buku</th>
+<th>Jumlah</th>
+<th>Tanggal</th>
+<th>Jam</th>
+<th>Status</th>
+
+</tr>
+
+${isiTabel}
+
+</table>
+
+</body>
+
+</html>
+
+`;
+
+let blob = new Blob(
+['\ufeff', html],
+{
+type:'application/vnd.ms-excel'
+}
+);
+
+let url = URL.createObjectURL(blob);
+
+let a = document.createElement("a");
+
+a.href = url;
+
+a.download =
+"Laporan_Riwayat_Perpustakaan.xls";
+
+document.body.appendChild(a);
+
+a.click();
+
+document.body.removeChild(a);
+
+URL.revokeObjectURL(url);
+
+}
 
 tampilkanRiwayat();
 
