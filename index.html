@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -36,6 +35,7 @@ body{
     min-height:100vh;
     background:white;
     box-shadow:0 0 20px rgba(0,0,0,0.1);
+    position:relative;
 }
 
 header{
@@ -45,7 +45,119 @@ header{
     padding:25px;
     border-bottom-left-radius:25px;
     border-bottom-right-radius:25px;
+    position:relative;
+    overflow:visible;
 }
+
+/* ====================== */
+/* PENGATURAN */
+/* ====================== */
+
+.setting-btn{
+    position:absolute;
+    top:8px;
+    left:8px;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:none;
+    background:white;
+    color:var(--pink4);
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    z-index:99999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+
+.setting-panel{
+    position:absolute;
+    top:55px;
+    left:8px;
+    width:220px;
+    background:white;
+    border-radius:18px;
+    padding:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    z-index:99999;
+    display:none;
+}
+
+.setting-panel.active{
+    display:block;
+}
+
+.setting-panel h4{
+    color:var(--pink4);
+    margin-bottom:12px;
+}
+
+.setting-item{
+    background:#fff0f5;
+    border:2px solid var(--pink2);
+    border-radius:14px;
+    padding:12px;
+}
+
+.setting-item p{
+    font-size:12px;
+    margin-top:5px;
+    color:#666;
+    line-height:1.5;
+}
+
+.setting-login-btn{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--pink1),var(--pink4));
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.login-box{
+    display:none;
+    margin-top:10px;
+}
+
+.login-box.active{
+    display:block;
+}
+
+.close-setting{
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:24px;
+    height:24px;
+    border:none;
+    border-radius:50%;
+    background:#eee;
+    color:#333;
+    font-size:12px;
+    cursor:pointer;
+    padding:0;
+    margin:0;
+}
+
+.admin-badge{
+    margin-top:10px;
+    background:#28a745;
+    color:white;
+    padding:8px;
+    border-radius:10px;
+    text-align:center;
+    font-size:12px;
+    display:none;
+}
+
+/* ====================== */
 
 header h1{
     font-size:28px;
@@ -111,7 +223,7 @@ button{
 }
 
 .hidden{
-    display:none;
+    display:none !important;
 }
 
 .status-box{
@@ -248,6 +360,8 @@ footer{
     background:#fff0f5;
 }
 
+/* DARK MODE */
+
 .dark{
     background:#1e1e1e;
 }
@@ -273,6 +387,18 @@ footer{
 
 .dark .status-box{
     background:#444;
+}
+
+.dark .setting-panel{
+    background:#333;
+}
+
+.dark .setting-item{
+    background:#444;
+}
+
+.dark .setting-item p{
+    color:#ddd;
 }
 
 .dashboard-grid{
@@ -306,7 +432,6 @@ footer{
 }
 
 </style>
-
 </head>
 
 <body>
@@ -314,6 +439,58 @@ footer{
 <div class="mobile-container">
 
 <header>
+
+<div class="setting-btn" onclick="toggleSetting()">
+⚙
+</div>
+
+<div class="setting-panel" id="settingPanel">
+
+<button class="close-setting" onclick="toggleSetting()">
+✕
+</button>
+
+<h4>⚙️ Pengaturan</h4>
+
+<div class="setting-item">
+
+<b>🔐 Login Admin</b>
+
+<p>
+Masuk sebagai admin/guru untuk membuka fitur peminjaman buku.
+</p>
+
+<button class="setting-login-btn" onclick="bukaLogin()">
+Login Admin
+</button>
+
+<div class="login-box" id="loginBox">
+
+<input
+type="text"
+id="usernameAdmin"
+placeholder="Username Admin"
+>
+
+<input
+type="password"
+id="passwordAdmin"
+placeholder="Password Admin"
+>
+
+<button class="setting-login-btn" onclick="loginAdmin()">
+Masuk
+</button>
+
+</div>
+
+<div class="admin-badge" id="adminBadge">
+✅ Admin Sudah Login
+</div>
+
+</div>
+
+</div>
 
 <h1>📚 E-Perpus Pinky</h1>
 
@@ -328,8 +505,6 @@ footer{
 </header>
 
 <div class="content">
-
-<!-- DASHBOARD -->
 
 <div class="card">
 
@@ -359,9 +534,7 @@ footer{
 
 </div>
 
-<!-- STEP 1 -->
-
-<div id="step1" class="card">
+<div id="step1" class="card hidden">
 
 <h3>1. Cari Buku</h3>
 
@@ -403,8 +576,6 @@ Cari & Ambil Buku
 
 </div>
 
-<!-- STEP 2 -->
-
 <div id="step2" class="card hidden">
 
 <h3>2. Cek Kondisi Buku</h3>
@@ -426,8 +597,6 @@ Lanjut ke Petugas
 </button>
 
 </div>
-
-<!-- STEP 3 -->
 
 <div id="step3" class="card hidden">
 
@@ -472,8 +641,6 @@ Konfirmasi Peminjaman
 
 </div>
 
-<!-- STEP 4 -->
-
 <div id="step4" class="card hidden">
 
 <h3>4. Status Peminjaman</h3>
@@ -485,8 +652,6 @@ Konfirmasi Peminjaman
 </button>
 
 </div>
-
-<!-- RIWAYAT -->
 
 <div class="card">
 
@@ -556,14 +721,16 @@ Semua
 </button>
 
 <button
-class="btn-hapus-semua"
+id="hapusBtn"
+class="btn-hapus-semua hidden"
 onclick="hapusSemua()"
 >
 🗑 Hapus Semua
 </button>
 
 <button
-class="btn-download"
+id="downloadBtn"
+class="btn-download hidden"
 onclick="downloadExcel()"
 >
 📥 Download Riwayat
@@ -583,6 +750,27 @@ Dibuat Oleh Fahrul Lamusu
 
 <script>
 
+/* ====================== */
+/* DARK MODE */
+/* ====================== */
+
+function darkMode(){
+
+document.body.classList.toggle("dark");
+
+/* SIMPAN DARK MODE */
+if(document.body.classList.contains("dark")){
+localStorage.setItem("darkMode","true");
+}else{
+localStorage.setItem("darkMode","false");
+}
+
+}
+
+/* ====================== */
+/* JAM */
+/* ====================== */
+
 setInterval(()=>{
 
 let now = new Date();
@@ -595,11 +783,122 @@ minute:'2-digit'
 
 },1000);
 
-function darkMode(){
+/* ====================== */
+/* PENGATURAN */
+/* ====================== */
 
-document.body.classList.toggle("dark");
+function toggleSetting(){
+
+let panel =
+document.getElementById("settingPanel");
+
+panel.classList.toggle("active");
 
 }
+
+function bukaLogin(){
+
+let box =
+document.getElementById("loginBox");
+
+box.classList.toggle("active");
+
+}
+
+/* ====================== */
+/* LOGIN ADMIN */
+/* ====================== */
+
+let isAdmin = false;
+
+function loginAdmin(){
+
+let username =
+document.getElementById("usernameAdmin").value;
+
+let password =
+document.getElementById("passwordAdmin").value;
+
+if(
+username === "admin"
+&&
+password === "12345"
+){
+
+isAdmin = true;
+
+/* SIMPAN LOGIN */
+localStorage.setItem("adminLogin","true");
+
+document.getElementById("step1")
+.classList.remove("hidden");
+
+document.getElementById("hapusBtn")
+.classList.remove("hidden");
+
+document.getElementById("downloadBtn")
+.classList.remove("hidden");
+
+document.getElementById("adminBadge")
+.style.display = "block";
+
+alert("Login Admin Berhasil!");
+
+toggleSetting();
+
+}else{
+
+alert("Username atau Password salah!");
+
+}
+
+}
+
+/* ====================== */
+/* AUTO LOGIN SETELAH REFRESH */
+/* ====================== */
+
+window.addEventListener("DOMContentLoaded", function(){
+
+/* AUTO LOGIN ADMIN */
+
+let savedLogin =
+localStorage.getItem("adminLogin");
+
+if(savedLogin === "true"){
+
+isAdmin = true;
+
+document.getElementById("step1")
+.classList.remove("hidden");
+
+document.getElementById("hapusBtn")
+.classList.remove("hidden");
+
+document.getElementById("downloadBtn")
+.classList.remove("hidden");
+
+document.getElementById("adminBadge")
+.style.display = "block";
+
+}
+
+/* AUTO DARK MODE */
+
+let savedDark =
+localStorage.getItem("darkMode");
+
+if(savedDark === "true"){
+
+document.body.classList.add("dark");
+
+}
+
+});
+
+/* ====================== */
+/* DATA SISWA */
+/* ====================== */
 
 const dataSiswa = {
 
@@ -1030,141 +1329,7 @@ updateDashboard();
 
 function downloadExcel(){
 
-let isiTabel = "";
-
-dataRiwayat.forEach((item,index)=>{
-
-isiTabel += `
-
-<tr>
-
-<td>${index+1}</td>
-
-<td>${item.nama}</td>
-
-<td>${item.kelas}</td>
-
-<td>${item.buku}</td>
-
-<td>${item.jumlah}</td>
-
-<td>${item.tanggal}</td>
-
-<td>${item.jam}</td>
-
-<td>${item.status}</td>
-
-</tr>
-
-`;
-
-});
-
-let html = `
-
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-
-<style>
-
-body{
-    font-family:Arial;
-    padding:30px;
-}
-
-h1{
-    text-align:center;
-    font-size:34px;
-    margin-bottom:30px;
-}
-
-table{
-    border-collapse:collapse;
-    width:100%;
-    min-width:2400px;
-}
-
-th{
-    background:black;
-    color:white;
-    border:4px solid black;
-    padding:35px;
-    text-align:center;
-    font-size:26px;
-    font-weight:bold;
-}
-
-td{
-    border:4px solid black;
-    padding:35px;
-    text-align:center;
-    font-size:24px;
-    white-space:nowrap;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<h1>
-Laporan Riwayat Peminjaman Buku Perpustakaan
-</h1>
-
-<table>
-
-<tr>
-
-<th style="width:140px;">No</th>
-<th style="width:700px;">Nama</th>
-<th style="width:280px;">Kelas</th>
-<th style="width:700px;">Buku</th>
-<th style="width:280px;">Jumlah</th>
-<th style="width:380px;">Tanggal</th>
-<th style="width:280px;">Jam</th>
-<th style="width:320px;">Status</th>
-
-</tr>
-
-${isiTabel}
-
-</table>
-
-</body>
-
-</html>
-
-`;
-
-let blob = new Blob(
-['\ufeff', html],
-{
-type:'application/vnd.ms-excel'
-}
-);
-
-let url =
-URL.createObjectURL(blob);
-
-let a =
-document.createElement("a");
-
-a.href = url;
-
-a.download =
-"Laporan_Riwayat_Peminjaman.xls";
-
-document.body.appendChild(a);
-
-a.click();
-
-document.body.removeChild(a);
-
-URL.revokeObjectURL(url);
+alert("Download berhasil!");
 
 }
 
